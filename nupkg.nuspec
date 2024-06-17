@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>CCF.Clean.Dotnet.WorkerService</id>
+        <version>1.0.3</version>
+        <title>CCF Clean Worker Service</title>
+        <license type="file">LICENSE</license>
+        <description>A ready-to-use project template for creating dotnet worker service, which supports MediatR, repositories, model mapping, dependency injection, Response Handling, Logging, Quartz.</description>
+            <projectUrl>https://github.com/JiteshSonkusare/dotnetcore-ccf-clean-worker-service-template</projectUrl>
+        <authors>Jitesh Sonkusare</authors>
+        <owners>Jitesh Sonkusare</owners>
+        <icon>./src/.template_config/cleanapi.png</icon>
+        <language>en-US</language>
+        <tags>Background Service;Worker Service;Worker Job;CCF;DNB</tags>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <copyright>CCF © 2024</copyright>
+        <summary>A ready-to-use project template for creating dotnet worker service, which supports MediatR, repositories, model mapping, dependency injection, Response Handling, Logging, Quartz.</summary>
+        <releaseNotes>Initial release</releaseNotes>
+        <repository type="git" url="https://github.com/JiteshSonkusare/dotnetcore-ccf-clean-worker-service-template"/>
+        <packageTypes>
+            <packageType name="Template" />
+        </packageTypes>
+        <readme>./README.md</readme>
+    </metadata>
+</package>
