@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCFCleanWSTemplate", "CCFCl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1D4B898C-6ED3-4812-9FE5-3F2CDC4360F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Architecture.Tests", "Architecture.Tests\Architecture.Tests.csproj", "{44719B70-4CF4-4AFC-BEF0-E0AB509E6652}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Tests", "Architecture.Tests\Architecture.Tests.csproj", "{44719B70-4CF4-4AFC-BEF0-E0AB509E6652}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTestConsoleApp", "MQTestConsoleApp\MQTestConsoleApp.csproj", "{40FB7DFA-DE74-4ECA-9A53-195DE0B70D7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{44719B70-4CF4-4AFC-BEF0-E0AB509E6652}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44719B70-4CF4-4AFC-BEF0-E0AB509E6652}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44719B70-4CF4-4AFC-BEF0-E0AB509E6652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40FB7DFA-DE74-4ECA-9A53-195DE0B70D7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40FB7DFA-DE74-4ECA-9A53-195DE0B70D7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40FB7DFA-DE74-4ECA-9A53-195DE0B70D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40FB7DFA-DE74-4ECA-9A53-195DE0B70D7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

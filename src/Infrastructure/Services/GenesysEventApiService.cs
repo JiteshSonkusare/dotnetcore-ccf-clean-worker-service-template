@@ -1,7 +1,7 @@
 ﻿using Shared.Wrapper;
 using Domain.Models.Genesys;
 using Application.Common.Interfaces;
-using static Domain.Errors.JobErrors;
+using static Domain.Errors.ErrorDto;
 using PureCloudPlatform.Client.V2.Api;
 using Application.Interfaces.Services;
 using Application.Common.ExceptionHandlers;

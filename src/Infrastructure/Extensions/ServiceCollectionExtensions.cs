@@ -1,9 +1,11 @@
-﻿using Infrastructure.Services;
+﻿using Infrastructure.MQ;
+using Infrastructure.Services;
 using Infrastructure.Genesys.Auth;
 using Infrastructure.Respositories;
 using Infrastructure.Genesys.Client;
 using Application.Common.Interfaces;
 using Application.Interfaces.Services;
+using Application.Common.Interfaces.MQ;
 using Application.Interfaces.Repositories;
 using Application.Common.Interfaces.Genesys;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,8 @@ public static class ServiceCollectionExtensions
                 .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
                 .AddTransient<IGenesysApiClient, GenesysApiClient>()
                 .AddTransient<IGenesysAuthHandler, GenesysAuthHandler>()
-                .AddTransient<IGenesysEventApiService, GenesysEventApiService>();
+                .AddTransient<IGenesysEventApiService, GenesysEventApiService>()
+                .AddTransient<IMQReaderClient, MQReaderClient>()
+                .AddTransient<IMQWriterClient, MQWriterClient>();
     }
 }
