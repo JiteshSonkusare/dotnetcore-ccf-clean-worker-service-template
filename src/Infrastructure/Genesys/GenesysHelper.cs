@@ -3,7 +3,7 @@ using Application.Common.ExceptionHandlers;
 
 namespace Infrastructure.Genesys;
 
-public static class Extensions
+public static class GenesysHelper
 {
 	public static PureCloudRegionHosts GetRegion(string configRegion)
 	{

@@ -107,11 +107,11 @@ public class Run
             QueueManagerName = "MT94",
             QueueName = "GENESYS01.XML.FROM.PORTAL01",
             Properties = new Dictionary<string, object>
-                {
-                    { MQC.HOST_NAME_PROPERTY, "mq-MT94.drf01.net" },
-                    { MQC.PORT_PROPERTY, 4350 },
-                    { MQC.CHANNEL_PROPERTY, "GENESYS01.MT94.CL01" }
-                }
+            {
+                { MQC.HOST_NAME_PROPERTY, "mq-MT94.drf01.net" },
+                { MQC.PORT_PROPERTY, 4350 },
+                { MQC.CHANNEL_PROPERTY, "GENESYS01.MT94.CL01" }
+            }
         };
 
         // Initialize and use MQ client

@@ -1,11 +1,11 @@
-﻿using Domain.Config;
-using Shared.Wrapper;
+﻿using Shared.Wrapper;
 using Polly.Registry;
 using Microsoft.Extensions.Options;
 using Application.Common.Interfaces;
 using PureCloudPlatform.Client.V2.Client;
 using Application.Common.ExceptionHandlers;
 using Application.Common.Interfaces.Genesys;
+using Domain.Config.Genesys;
 
 namespace Infrastructure.Genesys.Client;
 
@@ -18,7 +18,7 @@ public class GenesysApiClient(IOptions<GenesysConfig> genesysConfig, IGenesysAut
 
 	public async Task AuthenticateAsync()
 	{
-		var region = Extensions.GetRegion(_genesysConfig.Region ?? string.Empty);
+		var region = GenesysHelper.GetRegion(_genesysConfig.Region ?? string.Empty);
 		Configuration.ApiClient.setBasePath(region);
 
 		var tokenInfo = await _genesysAuthHandler.GetAccessTokenInfoAsync(

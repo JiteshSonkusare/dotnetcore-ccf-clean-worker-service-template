@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Infrastructure.MQ;
 
-public static class MQExtensions
+public static class MQHelper
 {
     public static void AddOptionalProperties(Hashtable connectionProperties, IDictionary<string, object> mqProperties)
     {

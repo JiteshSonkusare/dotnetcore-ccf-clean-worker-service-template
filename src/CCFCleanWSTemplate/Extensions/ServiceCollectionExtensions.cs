@@ -1,6 +1,5 @@
 ﻿using Quartz;
 using NLog.Web;
-using Domain.Config;
 using Shared.Extension;
 using Infrastructure.Context;
 using Application.Extensions;
@@ -8,6 +7,7 @@ using NLog.Extensions.Logging;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using WorkerService.Extensions.Quartz;
+using Domain.Config.Genesys;
 
 namespace WorkerService.Extensions;
 
