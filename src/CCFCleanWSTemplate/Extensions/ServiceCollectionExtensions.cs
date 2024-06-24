@@ -58,8 +58,8 @@ public static class ServiceCollectionExtensions
 
 	public static IServiceCollection ConfigOptionsDependencies(this IServiceCollection services, IConfiguration configuration)
 	{
-		services.AddOptions<GenesysClientConfig>()
-				.Bind(configuration.GetSection(GenesysClientConfig.SectionName))
+		services.AddOptions<GenesysConfig>()
+				.Bind(configuration.GetSection(GenesysConfig.SectionName))
 				.ValidateDataAnnotations();
 
 		return services;

@@ -12,10 +12,9 @@ namespace Infrastructure.Services;
 
 public class GenesysEventApiService : IGenesysEventApiService
 {
-    private readonly ArchitectApi _architectApi;
     private readonly GenesysApiConfig _config;
+    private readonly ArchitectApi _architectApi;
     private readonly IGenesysApiClient _genesysApiClient;
-
 
     public GenesysEventApiService(IOptions<GenesysApiConfig> config, IGenesysApiClient genesysApiClient)
     {
@@ -28,14 +27,16 @@ public class GenesysEventApiService : IGenesysEventApiService
     {
         try
         {
-            var datatableId = await _genesysApiClient.ExecuteWithRetryAsync(() =>
-                _architectApi.GetFlowsDatatablesAsync(name: _config.DatatableName));
+            var datatableId = await _genesysApiClient.ExecuteAsync(() =>
+                _architectApi.GetFlowsDatatablesAsync(name: _config.DatatableName),
+                useRetry: true);
 
             if (datatableId.Entities.Count == 0)
                 return Result.Failure(GenesysEventError.DatatableNameNotFound);
 
-            var result = await _genesysApiClient.ExecuteWithRetryAsync(() =>
-                _architectApi.PostFlowsDatatableRowsAsync(datatableId?.Entities?.FirstOrDefault()?.Id, eventsRequest));
+            var result = await _genesysApiClient.ExecuteAsync(() =>
+                _architectApi.PostFlowsDatatableRowsAsync(datatableId?.Entities?.FirstOrDefault()?.Id, eventsRequest),
+                useRetry: true);
 
             return Result.Success();
         }

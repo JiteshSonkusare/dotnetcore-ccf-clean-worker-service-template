@@ -20,23 +20,22 @@ public class MQReaderClient(
     private readonly MQReaderConfig _config = config.Value;
     private readonly ResiliencePipelineProvider<string> _pipelineProvider = pipelineProvider;
 
-    public async Task<Result<MQMessage>> ExecuteWithRetryAsync(CancellationToken cancellationToken)
+    public async Task<Result<MQMessage>> ExecuteAsync(CancellationToken cancellationToken, bool useRetry = false)
     {
         await InitializeMQClientAsync();
-        var pipeline = _pipelineProvider.GetPipeline("default");
-
-        try
+        if (useRetry)
         {
-            var result = await pipeline.ExecuteAsync(
-                async ct => await GetMessageAsync(cancellationToken)
+            var pipeline = _pipelineProvider.GetPipeline("default");
+            return  await pipeline.ExecuteAsync(
+                        async ct => await GetMessageAsync(cancellationToken)
                             .ConfigureAwait(false), cancellationToken)
-                            .ConfigureAwait(false);
+                        .ConfigureAwait(false);
 
-            return result;
         }
-        catch (Exception ex)
+        else
         {
-            throw ex.With(ex.Source, ex.Message);
+            return await GetMessageAsync(cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 
