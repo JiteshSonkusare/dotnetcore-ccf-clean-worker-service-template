@@ -31,7 +31,7 @@ public static class ErrorDto
 
     public static class MQErrors
     {
-        public static Error MQMessageReaderError(int code, string message) => new(
+        public static Error MQMessageError(int code, string message) => new(
             code.ToString(), message);
     }
 }

@@ -6,11 +6,12 @@ public interface IGenesysApiClient
 {
     T CreateApiInstance<T>() where T : class;
 
-    Task<TResult> ExecuteWithRetryAsync<TResult>(Func<Task<TResult>> action);
-
     Task<Result<T>> ExecuteWithRetryAsync<T>(Func<Task<Result<T>>> action);
+    Result<T> ExecuteWithRetry<T>(Func<Result<T>> action);
 
+    Task<TResult> ExecuteWithRetryAsync<TResult>(Func<Task<TResult>> action);
     TResult ExecuteWithRetry<TResult>(Func<TResult> action);
 
-    Result<T> ExecuteWithRetry<T>(Func<Result<T>> action);
+    Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action);
+    TResult Execute<TResult>(Func<TResult> action);
 }

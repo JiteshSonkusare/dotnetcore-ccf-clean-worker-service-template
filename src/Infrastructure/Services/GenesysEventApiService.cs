@@ -1,5 +1,7 @@
 ﻿using Shared.Wrapper;
 using Domain.Models.Genesys;
+using Domain.Config.Genesys;
+using Microsoft.Extensions.Options;
 using Application.Common.Interfaces;
 using static Domain.Errors.ErrorDto;
 using PureCloudPlatform.Client.V2.Api;
@@ -10,38 +12,39 @@ namespace Infrastructure.Services;
 
 public class GenesysEventApiService : IGenesysEventApiService
 {
-	private const string DatatableName = "WorkflowEvent";
+    private readonly ArchitectApi _architectApi;
+    private readonly GenesysApiConfig _config;
+    private readonly IGenesysApiClient _genesysApiClient;
 
-	private readonly IGenesysApiClient _genesysApiClient;
-	private readonly ArchitectApi _architectApi;
 
-	public GenesysEventApiService(IGenesysApiClient genesysApiClient)
-	{
-		_genesysApiClient = genesysApiClient;
-		_architectApi = _genesysApiClient.CreateApiInstance<ArchitectApi>();
-	}
+    public GenesysEventApiService(IOptions<GenesysApiConfig> config, IGenesysApiClient genesysApiClient)
+    {
+        _config = config.Value;
+        _genesysApiClient = genesysApiClient;
+        _architectApi = _genesysApiClient.CreateApiInstance<ArchitectApi>();
+    }
 
-	public async Task<Result> CreateEvent(EventRequest eventsRequest)
-	{
-		try
-		{
-			var datatableId = await _genesysApiClient.ExecuteWithRetryAsync(() =>
-				_architectApi.GetFlowsDatatablesAsync(name: DatatableName));
+    public async Task<Result> CreateEvent(EventRequest eventsRequest)
+    {
+        try
+        {
+            var datatableId = await _genesysApiClient.ExecuteWithRetryAsync(() =>
+                _architectApi.GetFlowsDatatablesAsync(name: _config.DatatableName));
 
-			if (datatableId.Entities.Count == 0)
-				return Result.Failure(GenesysEventError.DatatableNameNotFound);
+            if (datatableId.Entities.Count == 0)
+                return Result.Failure(GenesysEventError.DatatableNameNotFound);
 
-			var result = await _genesysApiClient.ExecuteWithRetryAsync(() =>
-				_architectApi.PostFlowsDatatableRowsAsync(datatableId?.Entities?.FirstOrDefault()?.Id, eventsRequest));
+            var result = await _genesysApiClient.ExecuteWithRetryAsync(() =>
+                _architectApi.PostFlowsDatatableRowsAsync(datatableId?.Entities?.FirstOrDefault()?.Id, eventsRequest));
 
-			return Result.Success();
-		}
-		catch (Exception ex)
-		{
-			throw ex.With(ex.Message, ex.Source, ex.StackTrace)
-					.DetailData(nameof(eventsRequest.Key), eventsRequest.Key)
-					.DetailData(nameof(eventsRequest.Note), eventsRequest.Note ?? string.Empty)
-					.DetailData(nameof(eventsRequest.Status), eventsRequest.Status ?? string.Empty);
-		}
-	}
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            throw ex.With(ex.Message, ex.Source, ex.StackTrace)
+                    .DetailData(nameof(eventsRequest.Key), eventsRequest.Key)
+                    .DetailData(nameof(eventsRequest.Note), eventsRequest.Note ?? string.Empty)
+                    .DetailData(nameof(eventsRequest.Status), eventsRequest.Status ?? string.Empty);
+        }
+    }
 }

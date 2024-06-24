@@ -5,6 +5,7 @@ namespace Application.Common.Interfaces.MQ;
 
 public interface IMQReaderClient : IDisposable
 {
-    Task InitializeMQClientAsync(string queueManagerName, string queueName, IDictionary<string, object> mqProperties);
-    Task<Result<MQMessage>> ExecuteWithRetryAsync();
+    Task<Result<MQMessage>> ExecuteWithRetryAsync(CancellationToken cancellationToken);
+
+    Task<Result<MQMessage>> ExecuteAsync(CancellationToken cancellationToken);
 }
