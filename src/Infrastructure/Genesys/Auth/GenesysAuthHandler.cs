@@ -31,7 +31,7 @@ public class GenesysAuthHandler(
             throw new Exception($"code: {tokenInfo.Error?.Code}, Error: {tokenInfo.Error?.Message}");
     }
 
-    private async Task<Result<AuthToken>> GetAccessTokenInfoAsync(ApiClient apiClient)
+    public async Task<Result<AuthToken>> GetAccessTokenInfoAsync(ApiClient apiClient)
     {
         ArgumentNullException.ThrowIfNull(apiClient);
 

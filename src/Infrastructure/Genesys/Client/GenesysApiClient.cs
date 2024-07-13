@@ -51,4 +51,32 @@ public class GenesysApiClient(
             return action();
         }
     }
+
+	public async Task ExecuteAsync(Func<Task> action, bool useRetry = false)
+	{
+		await _genesysAuthHandler.AuthenticateAsync(Configuration);
+		if (useRetry)
+		{
+			var pipeline = _pipelineProvider.GetPipeline("default");
+			await pipeline.ExecuteAsync(async ct => await action());
+		}
+		else
+		{
+			await action();
+		}
+	}
+
+	public void Execute(Action action, bool useRetry = false)
+	{
+		_genesysAuthHandler.AuthenticateAsync(Configuration).GetAwaiter().GetResult();
+		if (useRetry)
+		{
+			var pipeline = _pipelineProvider.GetPipeline("default");
+			pipeline.Execute(ct => action());
+		}
+		else
+		{
+			action();
+		}
+	}
 }

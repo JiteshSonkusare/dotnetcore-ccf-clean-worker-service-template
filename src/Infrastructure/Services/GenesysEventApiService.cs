@@ -16,18 +16,18 @@ public class GenesysEventApiService : IGenesysEventApiService
     private readonly ArchitectApi _architectApi;
     private readonly IGenesysApiClient _genesysApiClient;
 
-    public GenesysEventApiService(IOptions<GenesysApiConfig> config, IGenesysApiClient genesysApiClient)
+	public GenesysEventApiService(IOptions<GenesysApiConfig> config, IGenesysApiClient genesysApiClient)
     {
         _config = config.Value;
         _genesysApiClient = genesysApiClient;
         _architectApi = _genesysApiClient.CreateApiInstance<ArchitectApi>();
-    }
+	}
 
     public async Task<Result> CreateEvent(EventRequest eventsRequest)
     {
         try
         {
-            var datatableId = await _genesysApiClient.ExecuteAsync(() =>
+			var datatableId = await _genesysApiClient.ExecuteAsync(() =>
                 _architectApi.GetFlowsDatatablesAsync(name: _config.DatatableName),
                 useRetry: true);
 
