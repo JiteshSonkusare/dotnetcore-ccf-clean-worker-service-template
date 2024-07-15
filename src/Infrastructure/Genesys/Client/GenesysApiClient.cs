@@ -1,82 +1,45 @@
-﻿using Polly.Registry;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using PureCloudPlatform.Client.V2.Client;
 using Application.Common.Interfaces.Genesys;
 
 namespace Infrastructure.Genesys.Client;
 
 public class GenesysApiClient(
-    IGenesysAuthHandler genesysAuthHandler,
-    ResiliencePipelineProvider<string> pipelineProvider)
-    : IGenesysApiClient
+	IGenesysConfigurationHandler genesysConfigurationHandler)
+	: IGenesysApiClient
 {
-    private Configuration Configuration { get; set; } = new();
-    private readonly IGenesysAuthHandler _genesysAuthHandler = genesysAuthHandler;
-    private readonly ResiliencePipelineProvider<string> _pipelineProvider = pipelineProvider;
+	private Configuration Configuration { get; set; } = new();
+	private readonly IGenesysConfigurationHandler _genesysConfigurationHandler = genesysConfigurationHandler;
 
-    public T CreateApiInstance<T>() where T : class
-    {
-        var constructor = typeof(T).GetConstructor(new[] { typeof(Configuration) });
+	public T CreateApiInstance<T>() where T : class
+	{
+		var constructor = typeof(T).GetConstructor(new[] { typeof(Configuration) });
 
-        if (constructor == null)
-            throw new InvalidOperationException($"Type {typeof(T).Name} does not have a constructor with a Configuration parameter.");
+		if (constructor == null)
+			throw new InvalidOperationException($"Type {typeof(T).Name} does not have a constructor with a Configuration parameter.");
 
-        return (T)constructor.Invoke(new object[] { Configuration });
-    }
+		return (T)constructor.Invoke(new object[] { Configuration });
+	}
 
-    public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action, bool useRetry = false)
-    {
-        await _genesysAuthHandler.AuthenticateAsync(Configuration);
-        if (useRetry)
-        {
-            var pipeline = _pipelineProvider.GetPipeline("default");
-            return await pipeline.ExecuteAsync(async ct => await action());
-        }
-        else
-        {
-            return await action();
-        }
-    }
+	public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action, bool useRetry = false)
+	{
+		return await ExecuteAsync(action, useRetry);
+	}
 
-    public TResult Execute<TResult>(Func<TResult> action, bool useRetry = false)
-    {
-        _genesysAuthHandler.AuthenticateAsync(Configuration).GetAwaiter().GetResult();
-        if (useRetry)
-        {
-            var pipeline = _pipelineProvider.GetPipeline("default");
-            return pipeline.Execute(ct => action());
-        }
-        else
-        {
-            return action();
-        }
-    }
+	public TResult Execute<TResult>(Func<TResult> action, bool useRetry = false)
+	{
+		return Execute(action, useRetry);
+	}
 
 	public async Task ExecuteAsync(Func<Task> action, bool useRetry = false)
 	{
-		await _genesysAuthHandler.AuthenticateAsync(Configuration);
-		if (useRetry)
-		{
-			var pipeline = _pipelineProvider.GetPipeline("default");
-			await pipeline.ExecuteAsync(async ct => await action());
-		}
-		else
-		{
-			await action();
-		}
+		await _genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry);
+		await action();
 	}
 
 	public void Execute(Action action, bool useRetry = false)
 	{
-		_genesysAuthHandler.AuthenticateAsync(Configuration).GetAwaiter().GetResult();
-		if (useRetry)
-		{
-			var pipeline = _pipelineProvider.GetPipeline("default");
-			pipeline.Execute(ct => action());
-		}
-		else
-		{
-			action();
-		}
+		_genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry).GetAwaiter().GetResult();
+		action();
 	}
 }

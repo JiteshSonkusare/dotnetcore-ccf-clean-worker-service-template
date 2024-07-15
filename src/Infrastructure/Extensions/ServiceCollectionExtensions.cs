@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
                 .AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>))
                 .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
                 .AddTransient<IGenesysApiClient, GenesysApiClient>()
-                .AddTransient<IGenesysAuthHandler, GenesysAuthHandler>()
+                .AddTransient<IGenesysConfigurationHandler, GenesysConfigurationHandler>()
                 .AddTransient<IGenesysEventApiService, GenesysEventApiService>()
                 .AddTransient<IMQReaderClient, MQReaderClient>()
                 .AddTransient<IMQWriterClient, MQWriterClient>();

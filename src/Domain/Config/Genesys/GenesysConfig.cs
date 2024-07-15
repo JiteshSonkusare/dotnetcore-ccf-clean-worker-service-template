@@ -7,4 +7,6 @@ public class GenesysConfig
     public GenesysClientConfig ClientDetails { get; set; } = null!;
 
     public GenesysApiConfig ApiDetails { get; set; } = null!;
+
+	public GenesysLoggerConfig Logging { get; set; } = null!;
 }
