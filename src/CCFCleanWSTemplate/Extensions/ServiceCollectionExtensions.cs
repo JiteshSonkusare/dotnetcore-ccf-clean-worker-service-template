@@ -1,13 +1,14 @@
 ﻿using Quartz;
 using NLog.Web;
 using Shared.Extension;
+using Domain.Config.MQ;
+using Domain.Config.Genesys;
 using Infrastructure.Context;
 using Application.Extensions;
 using NLog.Extensions.Logging;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using WorkerService.Extensions.Quartz;
-using Domain.Config.Genesys;
 
 namespace WorkerService.Extensions;
 
@@ -54,12 +55,16 @@ public static class ServiceCollectionExtensions
 
 	#endregion
 
-	#region COnfiguration
+	#region Configuration
 
 	public static IServiceCollection ConfigOptionsDependencies(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddOptions<GenesysConfig>()
 				.Bind(configuration.GetSection(GenesysConfig.SectionName))
+				.ValidateDataAnnotations();
+
+		services.AddOptions<MQConfig>()
+				.Bind(configuration.GetSection(MQConfig.SectionName))
 				.ValidateDataAnnotations();
 
 		return services;
