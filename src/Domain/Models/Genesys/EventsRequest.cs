@@ -1,3 +1,8 @@
 ﻿namespace Domain.Models.Genesys;
 
-public record EventRequest(string Key, string? Note ,string? Status);
+public class EventRequest
+{
+	public string Key { get; set; } = null!;
+	public string? Note { get; set; }
+	public string? Status { get; set; }
+}

@@ -23,12 +23,14 @@ public class GenesysApiClient(
 
 	public async Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> action, bool useRetry = false)
 	{
-		return await ExecuteAsync(action, useRetry);
+		await _genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry);
+		return await action();
 	}
 
 	public TResult Execute<TResult>(Func<TResult> action, bool useRetry = false)
 	{
-		return Execute(action, useRetry);
+		_genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry).GetAwaiter().GetResult();
+		return action();
 	}
 
 	public async Task ExecuteAsync(Func<Task> action, bool useRetry = false)

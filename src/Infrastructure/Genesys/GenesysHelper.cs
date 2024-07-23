@@ -41,7 +41,7 @@ public static class GenesysHelper
 			? logLevel 
 			: LogLevel.LTrace;
 
-		configuration.Logger.Format = Enum.TryParse<LogFormat>(genesysLoggerConfig.Format, true, out var logFormat) 
+		configuration.Logger.Format = Enum.TryParse<LogFormat>(genesysLoggerConfig.Format, true, out var logFormat)
 			? logFormat 
 			: LogFormat.JSON;
 

@@ -5,6 +5,7 @@ using Application.Tasks.SendEvent.Commands;
 
 namespace WorkerService.Jobs;
 
+[DisallowConcurrentExecution]
 public class EventsJob(ISender sender, ILogger<EventsJob> logger) : IJob
 {
 	private readonly ISender Sender = sender;
