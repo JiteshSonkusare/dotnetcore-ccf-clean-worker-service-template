@@ -1,4 +1,5 @@
 using NetArchTest.Rules;
+using NUnit.Framework.Legacy;
 
 namespace Architecture.Tests;
 
@@ -31,7 +32,7 @@ public class ArhitectureTests
 			.GetResult();
 
 		// Assert
-		Assert.True(testResult.IsSuccessful);
+		ClassicAssert.True(testResult.IsSuccessful);
 	}
 
 	[Test]
@@ -54,7 +55,7 @@ public class ArhitectureTests
 			.GetResult();
 
 		// Assert
-		Assert.True(testResult.IsSuccessful);
+		ClassicAssert.True(testResult.IsSuccessful);
 	}
 
 	[Test]
@@ -76,6 +77,6 @@ public class ArhitectureTests
 			.GetResult();
 
 		// Assert
-		Assert.True(testResult.IsSuccessful);
+		ClassicAssert.True(testResult.IsSuccessful);
 	}
 }

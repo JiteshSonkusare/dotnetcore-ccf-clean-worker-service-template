@@ -17,18 +17,28 @@ public static class QuartzConfiguratorExtensions
 			var configKey = $"Quartz:{jobName}";
 			var cronSchedule = configuration[configKey];
 
+			var jobKey = new JobKey(jobName);
+
 			if (string.IsNullOrEmpty(cronSchedule))
 			{
-				throw new ArgumentNullException($"No Quartz.NET Cron schedule found for job in configuration at {configKey}");
+				quartz.
+					AddJob<T>(jobs => jobs.WithIdentity(jobKey).StoreDurably())
+						.AddTrigger(trigger => trigger
+							.ForJob(jobKey)
+								.WithIdentity(jobName + "-trigger")
+									.WithSimpleSchedule(x =>
+										x.WithIntervalInSeconds(10)
+											.RepeatForever()));
 			}
-
-			var jobKey = new JobKey(jobName);
-			quartz.
-				AddJob<T>(jobs => jobs.WithIdentity(jobKey).StoreDurably())
-					.AddTrigger(trigger => trigger
-						.ForJob(jobKey)
-							.WithIdentity(jobName + "-trigger")
-								.WithCronSchedule(cronSchedule));
+			else
+			{
+				quartz.
+					AddJob<T>(jobs => jobs.WithIdentity(jobKey).StoreDurably())
+						.AddTrigger(trigger => trigger
+							.ForJob(jobKey)
+								.WithIdentity(jobName + "-trigger")
+									.WithCronSchedule(cronSchedule));
+			}
 		}
 		catch (Exception ex)
 		{
@@ -54,17 +64,26 @@ public static class QuartzConfiguratorExtensions
 			var configKey = $"Quartz:{jobName}";
 			var cronSchedule = configuration[configKey];
 
+			var jobKey = new JobKey(jobName);
+
 			if (string.IsNullOrEmpty(cronSchedule))
 			{
-				throw new ArgumentNullException($"No Quartz.NET Cron schedule found for job in configuration at {configKey}");
-			}
-
-			var jobKey = new JobKey(jobName);
-			quartz.AddJob(type, jobKey, jobs => jobs.WithIdentity(jobKey).StoreDurably())
+				quartz.AddJob(type, jobKey, jobs => jobs.WithIdentity(jobKey).StoreDurably())
 					.AddTrigger(trigger => trigger
 					  .ForJob(jobKey)
 						.WithIdentity($"{jobName}-trigger")
-							.WithCronSchedule(cronSchedule));
+							.WithSimpleSchedule(x =>
+								x.WithIntervalInSeconds(10)
+									.RepeatForever()));
+			}
+			else
+			{
+				quartz.AddJob(type, jobKey, jobs => jobs.WithIdentity(jobKey).StoreDurably())
+						.AddTrigger(trigger => trigger
+						  .ForJob(jobKey)
+							.WithIdentity($"{jobName}-trigger")
+								.WithCronSchedule(cronSchedule));
+			}
 		}
 	}
 }

@@ -44,7 +44,6 @@ public static class ServiceCollectionExtensions
 	{ 
 		services.AddQuartz(q =>
 		{
-			//q.UseMicrosoftDependencyInjectionJobFactory();
 			q.AddJobListener<JobExceptionListener>();
 			q.AddJobsAndTriggers(configuration);
 		});
@@ -90,7 +89,9 @@ public static class ServiceCollectionExtensions
 	public static void SetEnvironmentConfiguration(this HostBuilderContext hostingContext, IConfigurationBuilder configuration)
 	{
 		var env = hostingContext.HostingEnvironment;
-		configuration.SetBasePath(Directory.GetCurrentDirectory());
+		var root = hostingContext.HostingEnvironment.ContentRootPath;
+		
+		configuration.SetBasePath(root);
 		configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 		configuration.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 		configuration.AddEnvironmentVariables();
