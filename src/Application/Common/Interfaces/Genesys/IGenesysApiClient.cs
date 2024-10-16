@@ -1,4 +1,5 @@
-﻿namespace Application.Common.Interfaces;
+﻿using Shared.Wrapper;
+namespace Application.Common.Interfaces;
 
 public interface IGenesysApiClient
 {
@@ -11,4 +12,12 @@ public interface IGenesysApiClient
 	Task ExecuteAsync(Func<Task> action, bool useRetry = false);
 
 	void Execute(Action action, bool useRetry = false);
+
+	Task<PagedResult<TResult>> ExecuteWithPagingAsync<TRequest, TResponse, TResult>(
+		Func<int, TRequest> createRequest,
+		Func<TRequest, Task<TResponse>> action,
+		Func<TResponse, IEnumerable<TResult>> extractResults,
+		Func<TResponse, int?>? extractTotalHits = null,
+		bool useRetry = false,
+		CancellationToken cancellationToken = default);
 }

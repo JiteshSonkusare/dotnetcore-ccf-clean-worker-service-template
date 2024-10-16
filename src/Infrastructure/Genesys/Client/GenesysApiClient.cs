@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Shared.Wrapper;
+using Application.Common.Interfaces;
 using PureCloudPlatform.Client.V2.Client;
 using Application.Common.Interfaces.Genesys;
 
@@ -43,5 +44,47 @@ public class GenesysApiClient(
 	{
 		_genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry).GetAwaiter().GetResult();
 		action();
+	}
+
+	public async Task<PagedResult<TResult>> ExecuteWithPagingAsync<TRequest, TResponse, TResult>(
+		Func<int, TRequest> createRequest,
+		Func<TRequest, Task<TResponse>> action,
+		Func<TResponse, IEnumerable<TResult>> extractResults,
+		Func<TResponse, int?>? extractTotalHits = null,
+		bool useRetry = false,
+		CancellationToken cancellationToken = default)
+	{
+		await _genesysConfigurationHandler.InitializeConfigurationAsync(Configuration, useRetry);
+
+		var allResults = new List<TResult>();
+		int currentPage = 1;
+		int totalHits = 0;
+
+		while (true)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var request = createRequest(currentPage);
+			var response = await ExecuteAsync(() => action(request), useRetry);
+
+			var pageResults = extractResults(response) ?? Enumerable.Empty<TResult>();
+
+			if (!pageResults.Any()) break;
+
+			allResults.AddRange(pageResults);
+
+			if (currentPage == 1 && extractTotalHits != null)
+			{
+				totalHits = extractTotalHits(response) ?? 0;
+
+				if (totalHits == 0) break;
+			}
+
+			if (totalHits > 0 && allResults.Count >= totalHits) break;
+
+			currentPage++;
+		}
+
+		return new PagedResult<TResult>(allResults, allResults.Count);
 	}
 }
